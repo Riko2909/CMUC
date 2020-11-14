@@ -10,6 +10,6 @@ If you want to track and untrack a player you simply need to type
 ```
 after that you need to hold a compass to track the specific player.
 
-# Suported Languages
+## Suported Languages
 
 - German
