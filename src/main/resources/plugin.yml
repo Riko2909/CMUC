@@ -1,0 +1,10 @@
+name: CMUC
+main: de.rikorick.main.CMUC
+version: 1.0
+author: rikorick
+
+commands:
+  track:
+    description: Used to track and untrack Players
+    usage: "/<command> [Player]"
+    aliases: find
