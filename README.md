@@ -1,6 +1,6 @@
 # CMUC
 
-"Catch Me if U can" is a simple plugin to track players.
+"Catch Me if U can" is a simple minecraft plugin to track players.
 
 ## How to use
 
