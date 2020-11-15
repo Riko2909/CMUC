@@ -10,13 +10,15 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 
 
-public class Tracker implements Listener {
+public class Tracker implements Listener  {
 
     public static HashMap<Player, Integer> schedulerId = new HashMap();
     public static ItemStack stacker;
@@ -66,5 +68,21 @@ public class Tracker implements Listener {
             player.sendMessage("§4Error, siehe Konsole");
             Bukkit.getConsoleSender().sendMessage(String.valueOf(exception));
         }
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event){
+        Player player = event.getPlayer();
+
+        if (event.getItemDrop().getItemStack().getType() == Material.COMPASS) {
+            Bukkit.getScheduler().cancelTask(schedulerId.get(player));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (schedulerId.get(player) != null)
+            Bukkit.getScheduler().cancelTask(schedulerId.get(player));
     }
 }
