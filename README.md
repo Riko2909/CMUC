@@ -13,3 +13,6 @@ after that you need to hold a compass to track the specific player.
 ## Suported Languages
 
 - German
+
+## TODO
+- Make config
