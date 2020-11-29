@@ -47,7 +47,7 @@ public class Tracker implements Listener  {
         Player player = event.getPlayer();
 
         stacker = player.getInventory().getItem(event.getNewSlot());
-        System.out.println(stacker);
+        //System.out.println(stacker);
 
         try {
 
@@ -76,7 +76,7 @@ public class Tracker implements Listener  {
     public void onPlayerDrop(PlayerDropItemEvent event){
         Player player = event.getPlayer();
 
-        if (event.getItemDrop().getItemStack().getType() == Material.COMPASS) {
+        if (event.getItemDrop().getItemStack().getType() == Material.COMPASS && schedulerId.get(player) != null) {
             Bukkit.getScheduler().cancelTask(schedulerId.get(player));
             schedulerId.replace(player, -1);
         }
@@ -96,7 +96,10 @@ public class Tracker implements Listener  {
     public void onPlayerPickup(EntityPickupItemEvent event) {
         Entity entity = event.getEntity();
 
-        if (entity instanceof Player) {
+        if (entity instanceof Player && event.getItem().getItemStack().getType() == Material.COMPASS &&
+                ((Player) entity).getInventory().getItemInMainHand().getType() == Material.COMPASS) {
+
+            System.out.println(((Player) entity).getInventory().getItemInMainHand().getType());
             schedulerId.put((Player) entity, track((Player) entity));
         }
 

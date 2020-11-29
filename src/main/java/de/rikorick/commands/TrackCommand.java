@@ -34,7 +34,7 @@ public class TrackCommand implements CommandExecutor {
 
             if (target != null) {
 
-                System.out.println(players);
+                //System.out.println(players);
 
                 //Wenn der Player schon jemaden Trackt dann:
                 if(players.containsKey(player)){
@@ -63,7 +63,7 @@ public class TrackCommand implements CommandExecutor {
 
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        System.out.println("Item: " + item);
+        //System.out.println("Item: " + item);
 
         if(item.getType() == Material.COMPASS) {
             schedulerId.put(player, Tracker.track(player));
