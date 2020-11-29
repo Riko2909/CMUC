@@ -1,26 +1,28 @@
 package de.rikorick.listener;
 
 
-import de.rikorick.commands.TrackerCommand;
+import de.rikorick.commands.TrackCommand;
 
 import de.rikorick.main.CMUC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
-
+import java.util.Map;
 
 
 public class Tracker implements Listener  {
 
-    public static HashMap<Player, Integer> schedulerId = new HashMap();
+    public static Map<Player, Integer> schedulerId = new HashMap<Player, Integer>();
     public static ItemStack stacker;
 
     public static int track(Player player) {
@@ -28,7 +30,7 @@ public class Tracker implements Listener  {
 
             @Override
             public void run() {
-                Player target = TrackerCommand.players.get(player);
+                Player target = TrackCommand.getTarget(player);
 
                 if (target != null){
                     player.setCompassTarget(target.getLocation());
@@ -45,6 +47,7 @@ public class Tracker implements Listener  {
         Player player = event.getPlayer();
 
         stacker = player.getInventory().getItem(event.getNewSlot());
+        System.out.println(stacker);
 
         try {
 
@@ -54,8 +57,7 @@ public class Tracker implements Listener  {
                     return;
                 }
 
-                int id = track(player);
-                schedulerId.put(player, id);
+                schedulerId.put(player, track(player));
 
             }else{
                 if(schedulerId.get(player) != null && schedulerId.get(player) != -1){
@@ -71,18 +73,32 @@ public class Tracker implements Listener  {
     }
 
     @EventHandler
-    public void onDrop(PlayerDropItemEvent event){
+    public void onPlayerDrop(PlayerDropItemEvent event){
         Player player = event.getPlayer();
 
         if (event.getItemDrop().getItemStack().getType() == Material.COMPASS) {
             Bukkit.getScheduler().cancelTask(schedulerId.get(player));
+            schedulerId.replace(player, -1);
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (schedulerId.get(player) != null)
+        TrackCommand.untrackPlayer(player);
+        if (schedulerId.get(player) != null){
             Bukkit.getScheduler().cancelTask(schedulerId.get(player));
+            schedulerId.replace(player, -1);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerPickup(EntityPickupItemEvent event) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Player) {
+            schedulerId.put((Player) entity, track((Player) entity));
+        }
+
     }
 }

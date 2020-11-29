@@ -1,6 +1,7 @@
 package de.rikorick.main;
 
-import de.rikorick.commands.TrackerCommand;
+import de.rikorick.commands.TrackCommand;
+import de.rikorick.config.CustomConfig;
 import de.rikorick.listener.Tracker;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -14,16 +15,27 @@ public class CMUC extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        plugin = this;
+        CMUC.plugin = this;
 
         PluginManager manager = Bukkit.getPluginManager();
 
         manager.registerEvents(new Tracker(), this);
 
-        getCommand("track").setExecutor(new TrackerCommand());
+        getCommand("track").setExecutor(new TrackCommand());
+
+        CustomConfig.loadConfig();
 
 
         Bukkit.getConsoleSender().sendMessage("§3§lCMUC loaded");
 
+    }
+
+    @Override
+    public void onDisable() {
+        CustomConfig.saveConfig();
+    }
+
+    public static CMUC getInstance() {
+        return CMUC.plugin;
     }
 }

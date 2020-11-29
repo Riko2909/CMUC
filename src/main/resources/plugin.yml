@@ -8,3 +8,7 @@ commands:
     description: Used to track and untrack Players
     usage: "/<command> [Player]"
     aliases: find
+
+  untrack:
+    description: Used to untrack and untrack Players
+    usage: "/<command> [Player]"
