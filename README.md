@@ -16,4 +16,3 @@ after that you need to hold a compass to track the specific player.
 
 ## TODO
 - Make config
-- Fix that players can track others if they are offline
